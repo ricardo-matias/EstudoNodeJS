@@ -1,0 +1,25 @@
+{
+  "name": "EstudoNodeJS",
+  "version": "1.0.0",
+  "description": "Repositório destinado a estudo do NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricardo-matias/EstudoNodeJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ricardo-matias/EstudoNodeJS/issues"
+  },
+  "homepage": "https://github.com/ricardo-matias/EstudoNodeJS#readme",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "express": "^4.16.4",
+    "http": "0.0.0"
+  }
+}
