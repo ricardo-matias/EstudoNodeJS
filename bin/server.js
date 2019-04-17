@@ -16,32 +16,48 @@
 // importações de dependencias da pasta node_modules
 
 const http = require('http');
-const debug = require('debug');
-const express = require('express');
+const debug = require('debug')('nodestr:server');
+const app = require('../src/app');
 
 // criando servidor 
 
-const app = express();
-const port = 3000;
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const server = http.createServer(app);
-const router = express.Router();
-
-// definindo rota
-
-const route = router.get('/', (request, response, next) => {
-    response.status(200).send({
-        titulo: "Estudo NodeJS API",
-        versao: "0.0.1"
-    });
-});
-
-app.use('/', route);
 
 // fazendo o servidor ouvir uma porta
 
 server.listen(port);
-console.log("API rodando na porta: " + port);
+server.on('listening', onListening);
 
 // para fazer o servidor rodar basta executar o comando: node server.js
+
+console.log("API rodando na porta: " + port);
+
+/**
+ * Normalize a port into a number, string, or false.
+ * Função recomendada pelo express 
+ */
+
+function normalizePort(val) {
+    const port = parseInt(val, 10);
+  
+    if (isNaN(port)) {
+      return val;
+    }
+  
+    if (port >= 0) {
+      return port;
+    }
+  
+    return false;
+}
+
+function onListening() { 
+    const andress = server.address();
+    const bind = typeof andress === 'string' 
+        ? 'pipe ' + andress
+        : 'port ' + andress.port;
+    debug('Listening on ' + bind);
+}
