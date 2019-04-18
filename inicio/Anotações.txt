@@ -35,3 +35,17 @@ Fazendo requisições de CRUD para o servidor
 
 - npm install body-parser --save
 - importar o body-parser para o app.js
+
+-------------------------------------------------------
+
+Conexão com banco de dados
+
+O banco usado será um MongoDB online (mongolab)
+Mais informações: https://www.youtube.com/watch?v=UAp91RCIqoU&list=PLHlHvK2lnJndvvycjBqQAbgEDqXxKLoqn&index=13
+
+Estou usando MongoDB Compass Community para monitorar as collections, mas dá pra fazer online tmb
+
+É necessário instalar o pacote mongoose
+- npm install mongoose --save
+
+-------------------------------------------------------
