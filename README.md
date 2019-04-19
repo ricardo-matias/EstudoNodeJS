@@ -1,4 +1,4 @@
-Repositório destinado a estudo do NodeJS
+#Repositório destinado a estudo do NodeJS
 
 Requesitos: 
 - NodeJS 
@@ -13,7 +13,7 @@ Utilização do projeto:
 No terminal apontando para o caminho do projeto execute os seguintes comandos
 
 - npm install       
-- node server.js
+- npm start
 
 O primeiro comando baixa as dependências do projeto (neste caso a pasta node_modules)
 O segundo comando executa o código do arquivo server.js (responsável pela configuração do servidor)
