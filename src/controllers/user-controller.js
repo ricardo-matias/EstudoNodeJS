@@ -1,106 +1,89 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const UserRepository = require('../repositories/user-repository');
 
 // Metodos de crud do controller de usuários
 
-exports.getAll = (request, response, next) => {
-    User
-        .find({active: true}, "_id name age phones")
-        .then(users => {
-            response.status(200).send(users);   
-        }).catch(ex => {
-            response.status(400).send({
-                message: "Falha ao pegar lista de usuários",
-                error: ex
-            });
-        });      
+exports.getAll = async(request, response, next) => {
+    try {
+        let users = await UserRepository.getAll();
+        response.status(200).send(users);
+    } catch (ex) {
+        throwException(response, "Falha ao buscar lista de usuários", ex);
+    }
+    
 }
 
-exports.getByName = (request, response, next) => {
-    User
-        .findOne({name: request.params.name, active: true}, "_id name age phones")
-        .then(user => {
-           // if (user) {
-                response.status(200).send(user);
-            /*} else {
-                response.status(200).send("Usuário não encontrado");
-            }*/
-            
-        }).catch(ex =>{
-            response.status(400).send({
-                message: "Falha ao buscar usuário",
-                error: ex
-            })
-        })
+exports.getByName = async(request, response, next) => {
+    try {
+        let user = await UserRepository.getByName(request.params.name);
+        if (user) {
+            response.status(200).send(user);
+        } else {
+            response.status(400).send(
+                'Nenhum usuário com o nome "' + request.params.name + '" foi encontrado!'
+            );
+        } 
+    } catch(ex) {
+        throwException(response, "Falha ao buscar usuário por nome", ex);
+    }
 }
 
-exports.getByPhone = (request, response, next) => {
-    User
-        .find({
-            phones: request.params.phone,
-            active: "true"
-        })
-        .then(users => {
-            response.status(200).send(users);
-        }).catch(ex => {
-            response.status(400).send({
-                message: "Falha ao buscar usuários pelo numero de telefone",
-                error: ex
-            })
-        })
+exports.getByPhone = async(request, response, next) => {
+    try {
+        let users = await UserRepository.getByPhone(request.params.phone);
+        response.status(200).send(users);
+    } catch(ex) {
+        throwException(response, "Falha ao buscar usuário pelo telefone", ex);
+    }
 }
 
-exports.create = (request, response, next) => { 
-    let user = new User(request.body);
-    user
-        .save()
-        .then(insert => {
-            response.status(201).send({
-                message: "Usuário cadastrado com sucesso!"
-            });    
-        }).catch(ex => {
-            response.status(400).send({
-                message: "Falha ao cadastrar novo usuário!",
-                error: ex
-            });
-        });       
+exports.create = async(request, response, next) => { 
+    try {
+        await UserRepository.create(request.body);
+        response.status(200).send("Usuário cadastrado com sucesso!");
+    } catch(ex) {
+        throwException(response, "Falha ao cadastrar usuário", ex);
+    }    
 }
 
-exports.update = (request, response, next) => {
-    User
-        .findOneAndUpdate(request.params.id, {
-            $set: {
-                name: request.body.name,
-                age: request.body.age,
-                active: request.body.active,
-                phones: request.body.phones
-            }
-        })
-        .then(update => {
-            response.status(200).send({
-                message: "Usuario atualizado com sucesso!",
-                //update: update
-            })
-        }).catch(ex => {
-            response.send({
-                message: "Falha ao atualizar usuário",
-                error: ex
-            })
-        })
+exports.update = async (request, response, next) => {
+    try {
+        await UserRepository.update(request.params.id, request.body);
+        response.status(200).send({
+            message: "Usuario atualizado com sucesso!",
+        });
+    } catch (ex) {
+        throwException(response, "Falha ao atualizar usuário", ex);
+    }
 }
 
-exports.delete = (request, response, next) => {
-    User
-        .findByIdAndDelete({_id: request.params.id})
-        .then(x => {
-            response.status(200).send({
-                message: "Usuário deletado com sucesso!",
-                user: x
-            })
-        }).catch(ex => {
-            response.status(400).send({
-                message: "Falha ao deletar usuário!",
-                error: ex
-            })
-        })
+exports.delete = async(request, response, next) => {
+    try {
+        await UserRepository.delete(request.params.id);
+        response.status(200).send({
+            message: "Usuário deletado com sucesso!",
+        });
+    } catch(ex) {
+        throwException(response, "Falha ao deletar usuário", ex);
+    }
+}
+
+/**
+ * Recebe o objeto response, uma messagem de erro e a exceção gerada e devolve uma messagem 
+ * de erro completa para o usuário.
+ * 
+ * @response : objeto response da requisição, usado para retornar a messagem para o usuário
+ * @message : messagem de erro que será enviada para o usuário
+ * @exception : exceção gerada pela tentativa de uso do banco
+ */
+
+throwException = (response, message, exception) => {
+    response.status(500).send({
+        message: message,
+        error: {
+            message: exception.message,
+            type: exception.name
+        }
+    })
 }

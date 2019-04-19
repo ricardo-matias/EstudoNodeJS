@@ -6,7 +6,8 @@ const app = express();
 
 // Conecta com o banco
 
-mongoose.connect("mongodb+srv://Ricardo:root@cluster0-pmnsv.mongodb.net/Test", { useNewUrlParser: true })
+//mongoose.connect("mongodb+srv://Ricardo:root@cluster0-pmnsv.mongodb.net/Test", { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/new', { useNewUrlParser: true });
 
 // Carregar models
 

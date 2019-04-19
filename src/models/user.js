@@ -12,15 +12,12 @@ const schema = new Schema({
     name: {
         type: String,
         required: true,
-        default: "Test",
         trim: true
     },
 
     age: {
         type: Number,
-        required: true,
-        default: 20,
-        trim: true
+        required: true
     },
 
     active: {
